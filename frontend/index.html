@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Multi-Deploy Demo</title>
+  <style>
+    body { font-family: sans-serif; padding: 2rem; }
+    button { margin: .5rem; padding: .75rem 1.5rem; font-size: 1rem; }
+    #output { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>¿Dónde está mi servicio?</h1>
+  <button onclick="callApi('AWS','http://<EC2_IP>:3000/api')">AWS EC2</button>
+  <button onclick="callApi('Heroku','https://demo-heroku.herokuapp.com/api')">Heroku</button>
+  <button onclick="callApi('DO','https://something.ondigitalocean.app/api')">DigitalOcean</button>
+  <button onclick="callApi('Vercel','https://<tu-proyecto>.vercel.app/api')">Vercel</button>
+  <button onclick="callApi('Railway','https://xyz.up.railway.app/api')">Railway</button>
+
+  <pre id="output">Haz clic en un botón y verás la respuesta aquí</pre>
+
+  <script>
+    async function callApi(name, url) {
+      document.getElementById("output").textContent = `Consultando ${name}...`;
+      try {
+        const res = await fetch(url);
+        const json = await res.json();
+        document.getElementById("output").textContent =
+          `🔹 Plataforma: ${json.platform}\n🔹 Hora: ${json.timestamp}`;
+      } catch (err) {
+        document.getElementById("output").textContent =
+          `Error al llamar a ${name}: ${err.message}`;
+      }
+    }
+  </script>
+</body>
+</html>
